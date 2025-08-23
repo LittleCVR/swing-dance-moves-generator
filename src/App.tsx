@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Shuffle, Play, Repeat, Wand2 } from "lucide-react";
 
@@ -152,7 +152,7 @@ function partitionBeatsRandom(total: number, allowed = ALLOWED_COUNTS): number[]
     if (remain === 0) return parts;
   }
   // 萬一實在拆不出來（理論上不會），退回全部 8
-  return new Array(Math.ceil(total / 8)).fill(8).map((v, i, a) =>
+  return new Array(Math.ceil(total / 8)).fill(8).map((_, i, a) =>
     i === a.length - 1 ? total - 8 * (a.length - 1) : 8
   );
 }
@@ -178,9 +178,6 @@ function buildSequence(
   const result: Move[] = [];
   let pos: Position = start;
 
-  // 預先為每段產生一個隨機順序的候選清單，提升多樣性
-  const stagedCands: Move[][] = structure.map((c) => shuffle(candidatesFor(c, pos, pool)));
-
   // 動態回溯（每一步根據當前 pos 重新取候選）
   let steps = 0;
   const picks: number[] = new Array(structure.length).fill(0);
@@ -196,7 +193,7 @@ function buildSequence(
       // 回溯
       if (i === 0) return null;
       i -= 1;
-      const lastMove = result.pop()!;
+      result.pop()!;
       pos = i === 0 ? start : result.reduce((p, m, idx) => (idx === i - 1 ? nextPos(p, m) : p), start);
       // 重新計算 pos：從頭計到第 i-1 個的 end
       pos = start;
