@@ -8,7 +8,7 @@ import { Shuffle, Play, Repeat, Wand2 } from "lucide-react";
 
 type Position = "closed" | "open" | "handshake" | "any";
 
-type Move = {
+interface Move {
   id: string;
   name: string;
   counts: number; // 幾拍
@@ -180,7 +180,7 @@ function buildSequence(
 
   // 動態回溯（每一步根據當前 pos 重新取候選）
   let steps = 0;
-  const picks: number[] = new Array(structure.length).fill(0);
+  const picks: number[] = new Array<number>(structure.length).fill(0);
 
   let i = 0;
   while (i < structure.length) {
