@@ -124,6 +124,17 @@ const MOVES: Move[] = [
 const ALLOWED_COUNTS = [4, 6, 8, 10];
 
 // ---------------------------------------------
+// Build hash（由 Vite 在 build 時注入）
+// ---------------------------------------------
+// 在 vite.config.ts 內用 define: { __BUILD_HASH__: JSON.stringify(hash) }
+// 這裡容錯：開發時沒有注入就顯示 "dev"
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+declare const __BUILD_HASH__: string;
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+const BUILD_HASH = typeof __BUILD_HASH__ !== "undefined" ? __BUILD_HASH__ : "dev";
+
+// ---------------------------------------------
 // 小工具函式
 // ---------------------------------------------
 
@@ -449,6 +460,10 @@ export default function App() {
             <li>若遇到無法產生，通常是因為結構太嚴格或起訖位置難以銜接，請嘗試換起始位置、改結構、或增添中介動作（如 4 拍 break）。</li>
           </ul>
         </section>
+
+        <footer className="mt-8 text-xs text-gray-500">
+         Version：{BUILD_HASH}
+        </footer>
       </div>
     </div>
   );
